@@ -3,8 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 
     <meta name="theme-color" content="#0a0a0d">
 
@@ -17,12 +16,9 @@
         href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
 
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <style>
-
         /* =========================================================
         RESET
         ========================================================= */
@@ -165,8 +161,7 @@
             justify-content: space-between;
 
             padding:
-                10px
-                max(18px, 6%);
+                10px max(18px, 6%);
 
             background: var(--header);
 
@@ -204,11 +199,9 @@
             border-radius: 12px;
 
             background:
-                linear-gradient(
-                    135deg,
+                linear-gradient(135deg,
                     var(--audio-accent),
-                    var(--video-accent)
-                );
+                    var(--video-accent));
 
             color: #08080a;
 
@@ -304,9 +297,7 @@
             max-width: 760px;
 
             margin:
-                clamp(38px, 7vw, 58px)
-                auto
-                38px;
+                clamp(38px, 7vw, 58px) auto 38px;
 
             padding: 0 20px;
 
@@ -345,11 +336,9 @@
 
         .hero h1 span {
             background:
-                linear-gradient(
-                    90deg,
+                linear-gradient(90deg,
                     var(--audio-accent),
-                    var(--video-accent)
-                );
+                    var(--video-accent));
 
             -webkit-background-clip: text;
             background-clip: text;
@@ -380,8 +369,7 @@
             margin: auto;
 
             padding:
-                0 20px
-                max(50px, 7vw);
+                0 20px max(50px, 7vw);
         }
 
         .player-card {
@@ -413,11 +401,9 @@
             height: 3px;
 
             background:
-                linear-gradient(
-                    90deg,
+                linear-gradient(90deg,
                     var(--audio-accent),
-                    var(--video-accent)
-                );
+                    var(--video-accent));
         }
 
 
@@ -564,9 +550,7 @@
             gap: 20px;
 
             padding:
-                clamp(25px, 5vw, 40px)
-                clamp(16px, 5vw, 30px)
-                28px;
+                clamp(25px, 5vw, 40px) clamp(16px, 5vw, 30px) 28px;
 
             background: #000;
         }
@@ -583,11 +567,9 @@
             border-radius: 20px;
 
             background:
-                linear-gradient(
-                    145deg,
+                linear-gradient(145deg,
                     var(--card-soft),
-                    #000
-                );
+                    #000);
 
             border:
                 1px solid var(--border);
@@ -700,15 +682,26 @@
             transition:
                 transform .2s ease,
                 background .2s ease;
+
+            /* Le bouton ne doit jamais dépasser du cadre vidéo,
+               même sur les très petits écrans en paysage. */
+            max-width: 22vh;
+            max-height: 22vh;
         }
 
         .center-play:hover {
             transform:
-                translate(-50%, -50%)
-                scale(1.08);
+                translate(-50%, -50%) scale(1.08);
 
             background: var(--accent);
             color: #000;
+        }
+
+        .center-play i {
+            /* Empêche l'icône FontAwesome de décaler visuellement
+               son centre optique dans le cercle. */
+            display: block;
+            line-height: 1;
         }
 
 
@@ -724,15 +717,12 @@
             bottom: 0;
 
             padding:
-                45px 16px
-                14px;
+                45px 16px 14px;
 
             background:
-                linear-gradient(
-                    to top,
+                linear-gradient(to top,
                     rgba(0, 0, 0, .92),
-                    transparent
-                );
+                    transparent);
 
             opacity: 0;
 
@@ -743,6 +733,11 @@
                 transform .2s ease;
 
             pointer-events: none;
+
+            /* Empêche tout débordement horizontal du bloc de
+               contrôles hors du cadre vidéo. */
+            max-width: 100%;
+            box-sizing: border-box;
         }
 
         .video-wrap:hover .video-controls,
@@ -815,8 +810,7 @@
             border-radius: 50%;
 
             transform:
-                translate(-50%, -50%)
-                scale(0);
+                translate(-50%, -50%) scale(0);
 
             transition: transform .15s ease;
 
@@ -826,8 +820,7 @@
         .progress-bar:hover .progress-handle,
         .progress-bar:active .progress-handle {
             transform:
-                translate(-50%, -50%)
-                scale(1);
+                translate(-50%, -50%) scale(1);
         }
 
         .time {
@@ -856,6 +849,7 @@
 
             display: flex;
             align-items: center;
+            flex-wrap: wrap;
 
             gap: 7px;
 
@@ -998,6 +992,10 @@
                 0 15px 35px rgba(0, 0, 0, .4);
 
             z-index: 100;
+
+            /* Empêche le menu de vitesse de sortir de l'écran
+               sur mobile quand le bouton est près du bord. */
+            max-width: calc(100vw - 24px);
         }
 
         .speed-menu.active {
@@ -1465,8 +1463,7 @@
 
         footer {
             padding:
-                32px 20px
-                max(32px, 5vw);
+                32px 20px max(32px, 5vw);
 
             border-top:
                 1px solid var(--border);
@@ -1653,9 +1650,31 @@
                 display: none;
             }
 
+            /* -----------------------------------------------------
+               VIDEO CONTROLS — MOBILE
+               La barre de contrôles vidéo débordait car tous les
+               boutons (précédent, -10s, play, +10s, suivant, son,
+               volume, vitesse, temps, repeat, shuffle, pip,
+               orientation, plein écran) tentaient de tenir sur une
+               seule ligne en flex, sans jamais wrapper proprement,
+               ce qui poussait les derniers boutons hors du cadre.
+
+               Solution : on force un retour à la ligne propre et on
+               masque des éléments secondaires non essentiels sur
+               très petit écran, avec les groupes recentrés.
+            ----------------------------------------------------- */
+
             .video-controls {
-                padding-left: 9px;
-                padding-right: 9px;
+                padding-left: 8px;
+                padding-right: 8px;
+                padding-bottom: 12px;
+            }
+
+            .video-controls .controls-row {
+                flex-wrap: wrap;
+                justify-content: center;
+                row-gap: 6px;
+                margin-top: 10px;
             }
 
             .video-controls .volume-slider {
@@ -1665,6 +1684,22 @@
             .video-controls .time {
                 min-width: auto;
                 font-size: 10px;
+                order: 10;
+                flex-basis: 100%;
+                text-align: center;
+                margin-top: 2px;
+            }
+
+            .video-controls .spacer {
+                display: none;
+            }
+
+            /* Sur mobile, on masque PiP et orientation pour
+               laisser de la place aux commandes essentielles ;
+               le plein écran reste toujours accessible. */
+            #pipBtn,
+            #orientationBtn {
+                display: none;
             }
 
             .playlist-list {
@@ -1724,7 +1759,9 @@
             }
 
             .speed-button {
-                min-width: 52px;
+                min-width: 46px;
+                padding: 0 6px;
+                font-size: 11px;
             }
 
             .playlist-item {
@@ -1747,6 +1784,18 @@
             .playlist-title {
                 font-size: 12px;
             }
+
+            /* Encore plus compact : réduit l'écart entre boutons
+               vidéo pour que tout tienne sans wrapper trop tôt. */
+            .video-controls .controls-row {
+                gap: 2px;
+            }
+
+            .video-controls .icon-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 13px;
+            }
         }
 
 
@@ -1754,11 +1803,7 @@
         LANDSCAPE MOBILE
         ========================================================= */
 
-        @media (
-            orientation: landscape
-        ) and (
-            max-height: 600px
-        ) {
+        @media (orientation: landscape) and (max-height: 600px) {
 
             .hero {
                 margin-top: 20px;
@@ -1788,6 +1833,20 @@
 
             .video-wrap {
                 aspect-ratio: 16 / 9;
+            }
+
+            /* En plein écran paysage sur mobile, on peut réafficher
+               le volume et le temps car il y a plus de largeur. */
+            .video-wrap:fullscreen .video-controls .volume-slider {
+                display: block;
+                width: 70px;
+                flex-basis: 70px;
+            }
+
+            .video-wrap:fullscreen .video-controls .time {
+                flex-basis: auto;
+                margin-top: 0;
+                order: initial;
             }
         }
 
@@ -1829,7 +1888,6 @@
                 transition-duration: .01ms !important;
             }
         }
-
     </style>
 </head>
 
@@ -1858,10 +1916,7 @@
 
             <div class="settings">
 
-                <button
-                    id="settingsBtn"
-                    type="button"
-                    aria-label="Paramètres">
+                <button id="settingsBtn" type="button" aria-label="Paramètres">
 
                     <i class="fa-solid fa-gear"></i>
 
@@ -1870,17 +1925,11 @@
                 </button>
 
 
-                <div
-                    class="settings-menu"
-                    id="settingsMenu">
+                <div class="settings-menu" id="settingsMenu">
 
-                    <button
-                        id="themeBtn"
-                        type="button">
+                    <button id="themeBtn" type="button">
 
-                        <i
-                            id="themeIcon"
-                            class="fa-solid fa-sun">
+                        <i id="themeIcon" class="fa-solid fa-sun">
                         </i>
 
                         <span id="themeLabel">
@@ -1890,9 +1939,7 @@
                     </button>
 
 
-                    <button
-                        type="button"
-                        onclick="openModal('conditions')">
+                    <button type="button" onclick="openModal('conditions')">
 
                         <i class="fa-solid fa-file-lines"></i>
 
@@ -1901,9 +1948,7 @@
                     </button>
 
 
-                    <button
-                        type="button"
-                        onclick="openModal('privacy')">
+                    <button type="button" onclick="openModal('privacy')">
 
                         <i class="fa-solid fa-lock"></i>
 
@@ -1912,9 +1957,7 @@
                     </button>
 
 
-                    <button
-                        type="button"
-                        onclick="openModal('contact')">
+                    <button type="button" onclick="openModal('contact')">
 
                         <i class="fa-solid fa-envelope"></i>
 
@@ -1939,9 +1982,7 @@
 
         <div class="eyebrow">
 
-            <i
-                id="eyebrowIcon"
-                class="fa-solid fa-headphones-simple">
+            <i id="eyebrowIcon" class="fa-solid fa-headphones-simple">
             </i>
 
             <span id="eyebrowText">
@@ -1978,10 +2019,7 @@
 
             <div class="switcher">
 
-                <button
-                    class="switch-btn active"
-                    id="audioTab"
-                    type="button">
+                <button class="switch-btn active" id="audioTab" type="button">
 
                     <i class="fa-solid fa-music"></i>
 
@@ -1990,10 +2028,7 @@
                 </button>
 
 
-                <button
-                    class="switch-btn"
-                    id="videoTab"
-                    type="button">
+                <button class="switch-btn" id="videoTab" type="button">
 
                     <i class="fa-solid fa-clapperboard"></i>
 
@@ -2011,15 +2046,11 @@
 
                 <!-- EMPTY -->
 
-                <div
-                    class="empty-state"
-                    id="emptyState">
+                <div class="empty-state" id="emptyState">
 
                     <div class="icon-circle">
 
-                        <i
-                            id="emptyIcon"
-                            class="fa-solid fa-headphones-simple">
+                        <i id="emptyIcon" class="fa-solid fa-headphones-simple">
                         </i>
 
                     </div>
@@ -2039,21 +2070,15 @@
 
                 <!-- ERROR -->
 
-                <div
-                    class="media-error"
-                    id="mediaError">
+                <div class="media-error" id="mediaError">
                 </div>
 
 
                 <!-- AUDIO -->
 
-                <div
-                    class="audio-view"
-                    id="audioView">
+                <div class="audio-view" id="audioView">
 
-                    <div
-                        class="cover"
-                        id="cover">
+                    <div class="cover" id="cover">
 
                         <i class="fa-solid fa-compact-disc"></i>
 
@@ -2073,41 +2098,29 @@
                     </div>
 
 
-                    <audio
-                        id="audioEl"
-                        preload="metadata">
+                    <audio id="audioEl" preload="metadata">
                     </audio>
 
 
                     <div class="progress-row">
 
-                        <span
-                            class="time"
-                            id="audioCurrent">
+                        <span class="time" id="audioCurrent">
                             0:00
                         </span>
 
 
-                        <div
-                            class="progress-bar"
-                            id="audioProgressBar">
+                        <div class="progress-bar" id="audioProgressBar">
 
-                            <div
-                                class="progress-fill"
-                                id="audioFill">
+                            <div class="progress-fill" id="audioFill">
                             </div>
 
-                            <div
-                                class="progress-handle"
-                                id="audioHandle">
+                            <div class="progress-handle" id="audioHandle">
                             </div>
 
                         </div>
 
 
-                        <span
-                            class="time"
-                            id="audioDuration">
+                        <span class="time" id="audioDuration">
                             0:00
                         </span>
 
@@ -2117,67 +2130,41 @@
                     <div class="controls-row">
 
 
-                        <button
-                            class="icon-btn"
-                            id="audioPrevBtn"
-                            title="Précédent"
-                            type="button">
+                        <button class="icon-btn" id="audioPrevBtn" title="Précédent" type="button">
 
                             <i class="fa-solid fa-backward-step"></i>
 
                         </button>
 
 
-                        <button
-                            class="icon-btn"
-                            id="audioRepeatBtn"
-                            title="Répétition"
-                            type="button">
+                        <button class="icon-btn" id="audioRepeatBtn" title="Répétition" type="button">
 
                             <i class="fa-solid fa-repeat"></i>
 
                         </button>
 
 
-                        <button
-                            class="icon-btn"
-                            id="audioShuffleBtn"
-                            title="Lecture aléatoire"
-                            type="button">
+                        <button class="icon-btn" id="audioShuffleBtn" title="Lecture aléatoire" type="button">
 
                             <i class="fa-solid fa-shuffle"></i>
 
                         </button>
 
 
-                        <button
-                            class="icon-btn"
-                            id="audioMuteBtn"
-                            title="Son"
-                            type="button">
+                        <button class="icon-btn" id="audioMuteBtn" title="Son" type="button">
 
                             <i class="fa-solid fa-volume-high"></i>
 
                         </button>
 
 
-                        <input
-                            type="range"
-                            id="audioVolume"
-                            class="volume-slider"
-                            min="0"
-                            max="1"
-                            step="0.01"
-                            value="1"
+                        <input type="range" id="audioVolume" class="volume-slider" min="0" max="1" step="0.01" value="1"
                             aria-label="Volume audio">
 
 
                         <div class="speed-control">
 
-                            <button
-                                class="icon-btn speed-button"
-                                id="audioSpeedBtn"
-                                type="button">
+                            <button class="icon-btn speed-button" id="audioSpeedBtn" type="button">
 
                                 <i class="fa-solid fa-gauge-high"></i>
 
@@ -2188,9 +2175,7 @@
                             </button>
 
 
-                            <div
-                                class="speed-menu"
-                                id="audioSpeedMenu">
+                            <div class="speed-menu" id="audioSpeedMenu">
 
                                 <button data-speed="0.5">
                                     0.5×
@@ -2200,9 +2185,7 @@
                                     0.75×
                                 </button>
 
-                                <button
-                                    data-speed="1"
-                                    class="active">
+                                <button data-speed="1" class="active">
                                     1×
                                 </button>
 
@@ -2230,11 +2213,7 @@
                         <div class="spacer"></div>
 
 
-                        <button
-                            class="play-btn"
-                            id="audioPlayBtn"
-                            title="Lecture / Pause"
-                            type="button">
+                        <button class="play-btn" id="audioPlayBtn" title="Lecture / Pause" type="button">
 
                             <i class="fa-solid fa-play"></i>
 
@@ -2244,11 +2223,7 @@
                         <div class="spacer"></div>
 
 
-                        <button
-                            class="icon-btn"
-                            id="audioNextBtn"
-                            title="Suivant"
-                            type="button">
+                        <button class="icon-btn" id="audioNextBtn" title="Suivant" type="button">
 
                             <i class="fa-solid fa-forward-step"></i>
 
@@ -2261,27 +2236,16 @@
 
                 <!-- VIDEO -->
 
-                <div
-                    class="video-view"
-                    id="videoView">
+                <div class="video-view" id="videoView">
 
-                    <div
-                        class="video-wrap"
-                        id="videoWrap">
+                    <div class="video-wrap" id="videoWrap">
 
 
-                        <video
-                            id="videoEl"
-                            preload="metadata"
-                            playsinline>
+                        <video id="videoEl" preload="metadata" playsinline>
                         </video>
 
 
-                        <button
-                            class="center-play"
-                            id="centerPlayBtn"
-                            type="button"
-                            aria-label="Lecture">
+                        <button class="center-play" id="centerPlayBtn" type="button" aria-label="Lecture">
 
                             <i class="fa-solid fa-play"></i>
 
@@ -2291,18 +2255,12 @@
                         <div class="video-controls">
 
 
-                            <div
-                                class="progress-bar"
-                                id="videoProgressBar">
+                            <div class="progress-bar" id="videoProgressBar">
 
-                                <div
-                                    class="progress-fill"
-                                    id="videoFill">
+                                <div class="progress-fill" id="videoFill">
                                 </div>
 
-                                <div
-                                    class="progress-handle"
-                                    id="videoHandle">
+                                <div class="progress-handle" id="videoHandle">
                                 </div>
 
                             </div>
@@ -2311,43 +2269,28 @@
                             <div class="controls-row">
 
 
-                                <button
-                                    class="icon-btn"
-                                    id="videoPrevBtn"
-                                    title="Précédent"
-                                    type="button">
+                                <button class="icon-btn" id="videoPrevBtn" title="Précédent" type="button">
 
                                     <i class="fa-solid fa-backward-step"></i>
 
                                 </button>
 
 
-                                <button
-                                    class="icon-btn"
-                                    id="videoBackBtn"
-                                    title="Reculer de 10 secondes"
-                                    type="button">
+                                <button class="icon-btn" id="videoBackBtn" title="Reculer de 10 secondes" type="button">
 
                                     <i class="fa-solid fa-rotate-left"></i>
 
                                 </button>
 
 
-                                <button
-                                    class="icon-btn"
-                                    id="videoPlayBtn"
-                                    title="Lecture / Pause"
-                                    type="button">
+                                <button class="icon-btn" id="videoPlayBtn" title="Lecture / Pause" type="button">
 
                                     <i class="fa-solid fa-play"></i>
 
                                 </button>
 
 
-                                <button
-                                    class="icon-btn"
-                                    id="videoForwardBtn"
-                                    title="Avancer de 10 secondes"
+                                <button class="icon-btn" id="videoForwardBtn" title="Avancer de 10 secondes"
                                     type="button">
 
                                     <i class="fa-solid fa-rotate-right"></i>
@@ -2355,45 +2298,27 @@
                                 </button>
 
 
-                                <button
-                                    class="icon-btn"
-                                    id="videoNextBtn"
-                                    title="Suivant"
-                                    type="button">
+                                <button class="icon-btn" id="videoNextBtn" title="Suivant" type="button">
 
                                     <i class="fa-solid fa-forward-step"></i>
 
                                 </button>
 
 
-                                <button
-                                    class="icon-btn"
-                                    id="videoMuteBtn"
-                                    title="Son"
-                                    type="button">
+                                <button class="icon-btn" id="videoMuteBtn" title="Son" type="button">
 
                                     <i class="fa-solid fa-volume-high"></i>
 
                                 </button>
 
 
-                                <input
-                                    type="range"
-                                    id="videoVolume"
-                                    class="volume-slider"
-                                    min="0"
-                                    max="1"
-                                    step="0.01"
-                                    value="1"
-                                    aria-label="Volume vidéo">
+                                <input type="range" id="videoVolume" class="volume-slider" min="0" max="1" step="0.01"
+                                    value="1" aria-label="Volume vidéo">
 
 
                                 <div class="speed-control">
 
-                                    <button
-                                        class="icon-btn speed-button"
-                                        id="videoSpeedBtn"
-                                        type="button">
+                                    <button class="icon-btn speed-button" id="videoSpeedBtn" type="button">
 
                                         <i class="fa-solid fa-gauge-high"></i>
 
@@ -2404,9 +2329,7 @@
                                     </button>
 
 
-                                    <div
-                                        class="speed-menu"
-                                        id="videoSpeedMenu">
+                                    <div class="speed-menu" id="videoSpeedMenu">
 
                                         <button data-speed="0.5">
                                             0.5×
@@ -2416,9 +2339,7 @@
                                             0.75×
                                         </button>
 
-                                        <button
-                                            data-speed="1"
-                                            class="active">
+                                        <button data-speed="1" class="active">
                                             1×
                                         </button>
 
@@ -2443,9 +2364,7 @@
                                 </div>
 
 
-                                <span
-                                    class="time"
-                                    id="videoTime">
+                                <span class="time" id="videoTime">
                                     0:00 / 0:00
                                 </span>
 
@@ -2453,55 +2372,35 @@
                                 <div class="spacer"></div>
 
 
-                                <button
-                                    class="icon-btn"
-                                    id="videoRepeatBtn"
-                                    title="Répétition"
-                                    type="button">
+                                <button class="icon-btn" id="videoRepeatBtn" title="Répétition" type="button">
 
                                     <i class="fa-solid fa-repeat"></i>
 
                                 </button>
 
 
-                                <button
-                                    class="icon-btn"
-                                    id="videoShuffleBtn"
-                                    title="Aléatoire"
-                                    type="button">
+                                <button class="icon-btn" id="videoShuffleBtn" title="Aléatoire" type="button">
 
                                     <i class="fa-solid fa-shuffle"></i>
 
                                 </button>
 
 
-                                <button
-                                    class="icon-btn"
-                                    id="pipBtn"
-                                    title="Picture in Picture"
-                                    type="button">
+                                <button class="icon-btn" id="pipBtn" title="Picture in Picture" type="button">
 
                                     <i class="fa-solid fa-clone"></i>
 
                                 </button>
 
 
-                                <button
-                                    class="icon-btn"
-                                    id="orientationBtn"
-                                    title="Paysage"
-                                    type="button">
+                                <button class="icon-btn" id="orientationBtn" title="Paysage" type="button">
 
                                     <i class="fa-solid fa-mobile-screen-button"></i>
 
                                 </button>
 
 
-                                <button
-                                    class="icon-btn"
-                                    id="fullscreenBtn"
-                                    title="Plein écran"
-                                    type="button">
+                                <button class="icon-btn" id="fullscreenBtn" title="Plein écran" type="button">
 
                                     <i class="fa-solid fa-expand"></i>
 
@@ -2522,9 +2421,7 @@
 
             <div class="upload-area">
 
-                <label
-                    class="upload-btn"
-                    for="fileInput">
+                <label class="upload-btn" for="fileInput">
 
                     <i class="fa-solid fa-folder-open"></i>
 
@@ -2533,18 +2430,12 @@
                 </label>
 
 
-                <input
-                    type="file"
-                    id="fileInput"
-                    accept="audio/*"
-                    multiple>
+                <input type="file" id="fileInput" accept="audio/*" multiple>
 
             </div>
 
 
-            <div
-                class="file-name"
-                id="fileName">
+            <div class="file-name" id="fileName">
 
                 Aucun fichier sélectionné
 
@@ -2572,10 +2463,7 @@
 
                     <div class="playlist-actions">
 
-                        <button
-                            id="clearPlaylist"
-                            title="Vider"
-                            type="button">
+                        <button id="clearPlaylist" title="Vider" type="button">
 
                             <i class="fa-solid fa-trash"></i>
 
@@ -2586,9 +2474,7 @@
                 </div>
 
 
-                <div
-                    class="playlist-list"
-                    id="playlistList">
+                <div class="playlist-list" id="playlistList">
                 </div>
 
             </div>
@@ -2671,10 +2557,7 @@
             </span>
 
 
-            <img
-                src="logo.png"
-                alt="Logo MedagDev"
-                class="footer-logo">
+            <img src="logo.png" alt="Logo MedagDev" class="footer-logo">
 
 
             <strong>
@@ -2686,9 +2569,7 @@
 
         <div class="footer-links">
 
-            <button
-                type="button"
-                onclick="openModal('conditions')">
+            <button type="button" onclick="openModal('conditions')">
 
                 <i class="fa-solid fa-file-lines"></i>
 
@@ -2697,9 +2578,7 @@
             </button>
 
 
-            <button
-                type="button"
-                onclick="openModal('privacy')">
+            <button type="button" onclick="openModal('privacy')">
 
                 <i class="fa-solid fa-lock"></i>
 
@@ -2708,9 +2587,7 @@
             </button>
 
 
-            <button
-                type="button"
-                onclick="openModal('contact')">
+            <button type="button" onclick="openModal('contact')">
 
                 <i class="fa-solid fa-envelope"></i>
 
@@ -2727,16 +2604,11 @@
     CONDITIONS
     ========================================================= -->
 
-    <div
-        class="modal"
-        id="conditions">
+    <div class="modal" id="conditions">
 
         <div class="modal-content">
 
-            <button
-                class="close"
-                onclick="closeModal('conditions')"
-                type="button">
+            <button class="close" onclick="closeModal('conditions')" type="button">
 
                 <i class="fa-solid fa-xmark"></i>
 
@@ -2878,16 +2750,11 @@
     PRIVACY
     ========================================================= -->
 
-    <div
-        class="modal"
-        id="privacy">
+    <div class="modal" id="privacy">
 
         <div class="modal-content">
 
-            <button
-                class="close"
-                onclick="closeModal('privacy')"
-                type="button">
+            <button class="close" onclick="closeModal('privacy')" type="button">
 
                 <i class="fa-solid fa-xmark"></i>
 
@@ -3013,16 +2880,11 @@
     CONTACT
     ========================================================= -->
 
-    <div
-        class="modal"
-        id="contact">
+    <div class="modal" id="contact">
 
         <div class="modal-content">
 
-            <button
-                class="close"
-                onclick="closeModal('contact')"
-                type="button">
+            <button class="close" onclick="closeModal('contact')" type="button">
 
                 <i class="fa-solid fa-xmark"></i>
 
@@ -3063,9 +2925,7 @@
 
             <p style="margin-top:12px">
 
-                <i
-                    class="fa-solid fa-envelope"
-                    style="color:var(--accent);margin-right:7px;">
+                <i class="fa-solid fa-envelope" style="color:var(--accent);margin-right:7px;">
                 </i>
 
                 <a href="mailto:medagdev@outlook.com">
@@ -3161,6 +3021,16 @@
         let controlsTimer = null;
 
         let pointerSeeking = false;
+
+        /*
+            Empêche les changements de mode/piste concurrents
+            de se marcher dessus : sans ce verrou, un double-tap
+            rapide sur Audio/Vidéo (ou un clic playlist pendant
+            qu'un chargement précédent est encore en cours)
+            provoquait des à-coups et des lectures qui se
+            chevauchaient ("ça lague et inversement").
+        */
+        let switchToken = 0;
 
 
         /*
@@ -3327,6 +3197,22 @@
                 return;
             }
 
+            /*
+                Si on est déjà dans ce mode, on ne refait rien.
+                Avant, cliquer deux fois sur le même onglet
+                relançait tout le pipeline d'affichage et pouvait
+                interrompre une lecture en cours -> saccades.
+            */
+            if (
+                mode === currentMode &&
+                document.body.dataset.mode === mode
+            ) {
+                return;
+            }
+
+            const myToken =
+                ++switchToken;
+
             currentMode = mode;
 
             document.body.dataset.mode =
@@ -3384,6 +3270,20 @@
 
 
             /*
+                On coupe immédiatement le média du mode que l'on
+                quitte pour éviter que deux flux (audio + vidéo)
+                jouent en même temps pendant la transition —
+                c'était une source de lag perçu au switch.
+            */
+            const leavingMedia =
+                isAudio ? videoEl : audioEl;
+
+            if (!leavingMedia.paused) {
+                leavingMedia.pause();
+            }
+
+
+            /*
                 On ne détruit pas la playlist.
 
                 On affiche simplement le média
@@ -3412,7 +3312,7 @@
                 playlist[currentIndex].type === mode
             ) {
 
-                displayCurrentMedia(false);
+                displayCurrentMedia(false, myToken);
 
                 return;
             }
@@ -3425,7 +3325,8 @@
 
             loadPlaylistItem(
                 modeItems[0].index,
-                false
+                false,
+                myToken
             );
         }
 
@@ -3523,11 +3424,10 @@
 
                         <div class="playlist-icon">
 
-                            <i class="fa-solid ${
-                                item.type === "video"
-                                    ? "fa-clapperboard"
-                                    : "fa-music"
-                            }"></i>
+                            <i class="fa-solid ${item.type === "video"
+                            ? "fa-clapperboard"
+                            : "fa-music"
+                        }"></i>
 
                         </div>
 
@@ -3538,11 +3438,10 @@
                             </span>
 
                             <span class="playlist-type">
-                                ${
-                                    item.type === "video"
-                                        ? "Vidéo"
-                                        : "Audio"
-                                }
+                                ${item.type === "video"
+                            ? "Vidéo"
+                            : "Audio"
+                        }
                             </span>
 
                         </div>
@@ -3756,7 +3655,8 @@
 
         function loadPlaylistItem(
             index,
-            autoplay = false
+            autoplay = false,
+            token = null
         ) {
 
             if (
@@ -3819,7 +3719,8 @@
 
 
             displayCurrentMedia(
-                autoplay
+                autoplay,
+                token ?? ++switchToken
             );
         }
 
@@ -3829,8 +3730,13 @@
         ========================================================= */
 
         function displayCurrentMedia(
-            autoplay = false
+            autoplay = false,
+            token = null
         ) {
+
+            const myToken =
+                token ?? ++switchToken;
+
 
             if (!hasCurrentMedia()) {
 
@@ -3858,12 +3764,17 @@
 
 
             /*
-                Arrête l'autre média.
+                Arrête l'autre média immédiatement (pas seulement
+                lors d'un changement de mode) pour éviter que deux
+                pistes se chevauchent audio/vidéo pendant la
+                transition.
             */
 
             if (item.type === "audio") {
 
-                videoEl.pause();
+                if (!videoEl.paused) {
+                    videoEl.pause();
+                }
 
                 showAudioView();
 
@@ -3917,14 +3828,21 @@
 
                 if (autoplay) {
 
-                    safePlay(
-                        audioEl
-                    );
+                    /*
+                        Si un autre switch a eu lieu entre-temps
+                        (double-tap rapide), on abandonne ce play
+                        pour ne pas relancer une piste obsolète.
+                    */
+                    if (myToken === switchToken) {
+                        safePlay(audioEl);
+                    }
                 }
 
             } else {
 
-                audioEl.pause();
+                if (!audioEl.paused) {
+                    audioEl.pause();
+                }
 
                 showVideoView();
 
@@ -3962,9 +3880,9 @@
 
                 if (autoplay) {
 
-                    safePlay(
-                        videoEl
-                    );
+                    if (myToken === switchToken) {
+                        safePlay(videoEl);
+                    }
                 }
             }
         }
@@ -4006,6 +3924,21 @@
                     showError(
                         "La lecture automatique est bloquée. Appuyez sur Lecture."
                     );
+
+                } else if (
+                    error?.name ===
+                    "AbortError"
+                ) {
+
+                    /*
+                        Un play() a été interrompu par un
+                        changement rapide de piste/mode : ce
+                        n'est pas une vraie erreur à afficher,
+                        sinon on spamme l'utilisateur pendant
+                        un double-switch rapide.
+                    */
+
+                    return false;
 
                 } else {
 
@@ -5866,7 +5799,12 @@
 
         renderPlaylist();
 
-        setMode("audio");
+        /*
+            État initial : pas besoin de passer par setMode()
+            (qui ignore désormais les no-op) car on est déjà en
+            mode "audio" par défaut dans le HTML/CSS.
+        */
+        showEmptyState();
 
 
         /* =========================================================
