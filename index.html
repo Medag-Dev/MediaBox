@@ -683,10 +683,10 @@
                 transform .2s ease,
                 background .2s ease;
 
-            /* Le bouton ne doit jamais dépasser du cadre vidéo,
-               même sur les très petits écrans en paysage. */
             max-width: 22vh;
             max-height: 22vh;
+
+            z-index: 5;
         }
 
         .center-play:hover {
@@ -698,8 +698,6 @@
         }
 
         .center-play i {
-            /* Empêche l'icône FontAwesome de décaler visuellement
-               son centre optique dans le cercle. */
             display: block;
             line-height: 1;
         }
@@ -734,10 +732,10 @@
 
             pointer-events: none;
 
-            /* Empêche tout débordement horizontal du bloc de
-               contrôles hors du cadre vidéo. */
             max-width: 100%;
             box-sizing: border-box;
+
+            z-index: 6;
         }
 
         .video-wrap:hover .video-controls,
@@ -993,8 +991,6 @@
 
             z-index: 100;
 
-            /* Empêche le menu de vitesse de sortir de l'écran
-               sur mobile quand le bouton est près du bord. */
             max-width: calc(100vw - 24px);
         }
 
@@ -1554,7 +1550,7 @@
             max-width: none;
             max-height: none;
 
-            object-fit: cover;
+            object-fit: contain;
             object-position: center center;
 
             margin: 0 auto;
@@ -1682,40 +1678,63 @@
             }
 
             /* -----------------------------------------------------
-               VIDEO CONTROLS — MOBILE
-               La barre de contrôles vidéo débordait car tous les
-               boutons (précédent, -10s, play, +10s, suivant, son,
-               volume, vitesse, temps, repeat, shuffle, pip,
-               orientation, plein écran) tentaient de tenir sur une
-               seule ligne en flex, sans jamais wrapper proprement,
-               ce qui poussait les derniers boutons hors du cadre.
-
-               Solution : on force un retour à la ligne propre et on
-               masque des éléments secondaires non essentiels sur
-               très petit écran, avec les groupes recentrés.
+               VIDEO CONTROLS — MOBILE (réécrit)
+               Objectif : TOUS les contrôles restent visibles et
+               utilisables, sans jamais déborder du cadre vidéo.
+               On utilise une grille en 2 lignes bien définies au
+               lieu de masquer des boutons, avec des tailles fixes
+               et prévisibles pour un alignement parfait.
             ----------------------------------------------------- */
 
             .video-controls {
-                padding-left: 8px;
-                padding-right: 8px;
-                padding-bottom: 12px;
+                padding: 10px 8px 10px;
+                pointer-events: auto;
             }
 
-            /*
-             * MOBILE : barre de commandes stable.
-             * On n'utilise PAS flex-wrap ici : le wrapping était la
-             * cause du déplacement et de l'écrasement du bouton Play.
-             * Les 7 commandes principales ont une largeur fixe.
-             */
+            /* Sur tactile, les contrôles vidéo restent toujours
+               visibles (pas de disparition surprise). */
+            .video-wrap .video-controls {
+                opacity: 1;
+                transform: none;
+                pointer-events: auto;
+                background:
+                    linear-gradient(to top,
+                        rgba(0, 0, 0, .95) 0%,
+                        rgba(0, 0, 0, .8) 55%,
+                        transparent 100%);
+            }
+
+            .video-controls .progress-row,
+            .video-controls .progress-bar {
+                margin-bottom: 2px;
+            }
+
+            .video-controls .time {
+                text-align: center;
+                width: 100%;
+                min-width: 0;
+                font-size: 11px;
+                margin: 2px 0 6px;
+                order: 3;
+            }
+
+            /* Ligne de contrôles : wrap autorisé pour ne JAMAIS
+               déborder, avec un espacement homogène et un
+               centrage parfait sur toutes les tailles d'écran. */
             .video-controls .controls-row {
                 display: flex;
-                flex-wrap: nowrap;
+                flex-wrap: wrap;
                 align-items: center;
                 justify-content: center;
-                gap: 4px;
-                margin-top: 10px;
-                min-width: 0;
-                overflow: hidden;
+                gap: 6px;
+                margin-top: 4px;
+                width: 100%;
+            }
+
+            /* Le spacer ne sert à rien en mode wrap sur mobile :
+               on le neutralise pour ne pas casser l'alignement. */
+            .video-controls .spacer {
+                display: none;
             }
 
             .video-controls .icon-btn {
@@ -1725,56 +1744,91 @@
                 max-width: 36px;
                 flex: 0 0 36px;
                 padding: 0;
-                font-size: 13px;
-            }
-
-            /* Le Play ne peut plus se rétrécir. */
-            .video-controls #videoPlayBtn {
-                width: 40px;
-                height: 40px;
-                min-width: 40px;
-                max-width: 40px;
-                flex: 0 0 40px;
                 font-size: 14px;
+                background: rgba(255, 255, 255, .06);
             }
 
-            .video-controls .volume-slider,
-            .video-controls .speed-control,
-            .video-controls .spacer {
-                display: none !important;
+            .video-controls #videoPlayBtn {
+                width: 42px;
+                height: 42px;
+                min-width: 42px;
+                max-width: 42px;
+                flex: 0 0 42px;
+                font-size: 15px;
+                order: 2;
             }
 
-            /* Les commandes secondaires sont masquées sur téléphone.
-               Les fonctions restent disponibles sur tablette/desktop. */
-            .video-controls #videoRepeatBtn,
-            .video-controls #videoShuffleBtn,
-            .video-controls #pipBtn,
+            .video-controls #videoBackBtn {
+                order: 1;
+            }
+
+            .video-controls #videoPrevBtn {
+                order: 0;
+            }
+
+            .video-controls #videoForwardBtn {
+                order: 3;
+            }
+
+            .video-controls #videoNextBtn {
+                order: 4;
+            }
+
+            /* Volume : on garde une version compacte plutôt que
+               de la masquer, pour que TOUT reste accessible. */
+            .video-controls .volume-slider {
+                display: block;
+                width: 54px;
+                flex: 0 0 54px;
+                order: 6;
+            }
+
+            .video-controls #videoMuteBtn {
+                order: 5;
+            }
+
+            .video-controls .speed-control {
+                order: 7;
+            }
+
+            .video-controls #videoRepeatBtn {
+                order: 8;
+            }
+
+            .video-controls #videoShuffleBtn {
+                order: 9;
+            }
+
+            .video-controls #pipBtn {
+                order: 10;
+            }
+
             .video-controls #orientationBtn {
-                display: none !important;
+                order: 11;
             }
 
-            .video-controls .time {
-                position: absolute;
-                left: 8px;
-                right: 8px;
-                bottom: 42px;
-                width: auto;
-                min-width: 0;
-                text-align: center;
-                font-size: 10px;
-                pointer-events: none;
+            .video-controls #fullscreenBtn {
+                order: 12;
             }
 
-            /* Sur très petit écran, on réduit uniquement les espaces,
-               jamais la taille du bouton Play. */
-            @media (max-width: 340px) {
+            .video-controls .speed-button {
+                min-width: 48px;
+                height: 36px;
+                font-size: 11px;
+            }
+
+            /* Sur très petit écran, on réduit les tailles mais on
+               ne masque plus aucune fonctionnalité : tout reste
+               cliquable et parfaitement aligné. */
+            @media (max-width: 380px) {
+
                 .video-controls {
                     padding-left: 4px;
                     padding-right: 4px;
                 }
 
                 .video-controls .controls-row {
-                    gap: 2px;
+                    gap: 4px;
                 }
 
                 .video-controls .icon-btn {
@@ -1783,14 +1837,27 @@
                     min-width: 32px;
                     max-width: 32px;
                     flex-basis: 32px;
+                    font-size: 12.5px;
                 }
 
                 .video-controls #videoPlayBtn {
-                    width: 36px;
-                    height: 36px;
-                    min-width: 36px;
-                    max-width: 36px;
-                    flex-basis: 36px;
+                    width: 38px;
+                    height: 38px;
+                    min-width: 38px;
+                    max-width: 38px;
+                    flex-basis: 38px;
+                    font-size: 14px;
+                }
+
+                .video-controls .volume-slider {
+                    width: 42px;
+                    flex-basis: 42px;
+                }
+
+                .video-controls .speed-button {
+                    min-width: 40px;
+                    padding: 0 5px;
+                    font-size: 10px;
                 }
             }
 
@@ -1876,9 +1943,6 @@
             .playlist-title {
                 font-size: 12px;
             }
-
-            /* La taille des boutons vidéo est déjà gérée dans la règle
-               mobile principale afin d'empêcher le Play de s'écraser. */
         }
 
 
@@ -1903,7 +1967,7 @@
                 height: 100%;
                 max-width: none;
                 max-height: none;
-                object-fit: cover;
+                object-fit: contain;
                 object-position: center center;
             }
 
@@ -1915,6 +1979,7 @@
                 width: 100%;
                 max-width: none;
                 box-sizing: border-box;
+                padding-bottom: max(14px, env(safe-area-inset-bottom));
             }
         }
 
@@ -1954,8 +2019,6 @@
                 aspect-ratio: 16 / 9;
             }
 
-            /* En plein écran paysage sur mobile, on peut réafficher
-               le volume et le temps car il y a plus de largeur. */
             .video-wrap:fullscreen .video-controls .volume-slider {
                 display: block;
                 width: 70px;
@@ -1979,6 +2042,7 @@
             .video-controls {
                 opacity: 1;
                 transform: none;
+                pointer-events: auto;
             }
 
             .center-play:hover {
@@ -1988,6 +2052,10 @@
 
             .icon-btn:hover {
                 background: transparent;
+            }
+
+            .icon-btn:active {
+                background: rgba(255, 255, 255, .15);
             }
         }
 
@@ -2374,12 +2442,16 @@
                         <div class="video-controls">
 
 
-                            <div class="progress-bar" id="videoProgressBar">
+                            <div class="progress-row">
 
-                                <div class="progress-fill" id="videoFill">
-                                </div>
+                                <div class="progress-bar" id="videoProgressBar">
 
-                                <div class="progress-handle" id="videoHandle">
+                                    <div class="progress-fill" id="videoFill">
+                                    </div>
+
+                                    <div class="progress-handle" id="videoHandle">
+                                    </div>
+
                                 </div>
 
                             </div>
@@ -3141,23 +3213,7 @@
 
         let pointerSeeking = false;
 
-        /*
-            Empêche les changements de mode/piste concurrents
-            de se marcher dessus : sans ce verrou, un double-tap
-            rapide sur Audio/Vidéo (ou un clic playlist pendant
-            qu'un chargement précédent est encore en cours)
-            provoquait des à-coups et des lectures qui se
-            chevauchaient ("ça lague et inversement").
-        */
         let switchToken = 0;
-
-
-        /*
-            Chaque élément possède sa propre ObjectURL.
-
-            Cela évite de révoquer l'URL du média actuel
-            par erreur lors d'un changement de piste.
-        */
 
 
         /* =========================================================
@@ -3316,12 +3372,6 @@
                 return;
             }
 
-            /*
-                Si on est déjà dans ce mode, on ne refait rien.
-                Avant, cliquer deux fois sur le même onglet
-                relançait tout le pipeline d'affichage et pouvait
-                interrompre une lecture en cours -> saccades.
-            */
             if (
                 mode === currentMode &&
                 document.body.dataset.mode === mode
@@ -3388,12 +3438,6 @@
                     : "Ajoutez un ou plusieurs fichiers vidéo.";
 
 
-            /*
-                On coupe immédiatement le média du mode que l'on
-                quitte pour éviter que deux flux (audio + vidéo)
-                jouent en même temps pendant la transition —
-                c'était une source de lag perçu au switch.
-            */
             const leavingMedia =
                 isAudio ? videoEl : audioEl;
 
@@ -3401,13 +3445,6 @@
                 leavingMedia.pause();
             }
 
-
-            /*
-                On ne détruit pas la playlist.
-
-                On affiche simplement le média
-                correspondant au nouveau mode.
-            */
 
             const modeItems =
                 getModeItems();
@@ -3421,11 +3458,6 @@
             }
 
 
-            /*
-                Si la piste actuelle appartient
-                au nouveau mode, on la réaffiche.
-            */
-
             if (
                 hasCurrentMedia() &&
                 playlist[currentIndex].type === mode
@@ -3436,11 +3468,6 @@
                 return;
             }
 
-
-            /*
-                Sinon, on sélectionne le premier
-                média de ce type.
-            */
 
             loadPlaylistItem(
                 modeItems[0].index,
@@ -3588,12 +3615,6 @@
                                 return;
                             }
 
-                            /*
-                                Si on clique sur un fichier
-                                d'un autre mode, on bascule
-                                automatiquement dans le bon mode.
-                            */
-
                             if (
                                 item.type !== currentMode
                             ) {
@@ -3719,11 +3740,6 @@
                 renderPlaylist();
 
 
-                /*
-                    On charge le premier fichier
-                    correspondant au mode actuel.
-                */
-
                 const firstCompatible =
                     newItems.findIndex(
                         item =>
@@ -3743,12 +3759,6 @@
 
                 } else {
 
-                    /*
-                        Si l'utilisateur était
-                        en Audio mais ajoutait uniquement
-                        des vidéos, on bascule automatiquement.
-                    */
-
                     const firstIndex =
                         firstNewIndex;
 
@@ -3757,11 +3767,6 @@
                     );
                 }
 
-
-                /*
-                    Permet de sélectionner à nouveau
-                    exactement le même fichier.
-                */
 
                 fileInput.value = "";
             }
@@ -3792,11 +3797,6 @@
 
             currentIndex = index;
 
-
-            /*
-                Le fichier appartient à l'autre mode.
-                On change automatiquement de mode.
-            */
 
             if (
                 item.type !== currentMode
@@ -3882,13 +3882,6 @@
             renderPlaylist();
 
 
-            /*
-                Arrête l'autre média immédiatement (pas seulement
-                lors d'un changement de mode) pour éviter que deux
-                pistes se chevauchent audio/vidéo pendant la
-                transition.
-            */
-
             if (item.type === "audio") {
 
                 if (!videoEl.paused) {
@@ -3897,11 +3890,6 @@
 
                 showAudioView();
 
-
-                /*
-                    On recharge le src uniquement
-                    lorsque nécessaire.
-                */
 
                 if (
                     audioEl.src !== item.url
@@ -3947,11 +3935,6 @@
 
                 if (autoplay) {
 
-                    /*
-                        Si un autre switch a eu lieu entre-temps
-                        (double-tap rapide), on abandonne ce play
-                        pour ne pas relancer une piste obsolète.
-                    */
                     if (myToken === switchToken) {
                         safePlay(audioEl);
                     }
@@ -4028,13 +4011,6 @@
 
             } catch (error) {
 
-                /*
-                    Les navigateurs peuvent refuser
-                    l'autoplay.
-
-                    Ce n'est pas une erreur de fichier.
-                */
-
                 if (
                     error?.name ===
                     "NotAllowedError"
@@ -4048,14 +4024,6 @@
                     error?.name ===
                     "AbortError"
                 ) {
-
-                    /*
-                        Un play() a été interrompu par un
-                        changement rapide de piste/mode : ce
-                        n'est pas une vraie erreur à afficher,
-                        sinon on spamme l'utilisateur pendant
-                        un double-switch rapide.
-                    */
 
                     return false;
 
@@ -4088,11 +4056,6 @@
             const removed =
                 playlist[index];
 
-
-            /*
-                Libère uniquement l'URL
-                du fichier supprimé.
-            */
 
             if (removed.url) {
 
@@ -4149,11 +4112,6 @@
 
             if (wasCurrent) {
 
-                /*
-                    Cherche d'abord un élément
-                    du même mode.
-                */
-
                 const sameMode =
                     getModeItems();
 
@@ -4171,11 +4129,6 @@
                     );
 
                 } else {
-
-                    /*
-                        Aucun élément du mode actuel.
-                        On bascule sur le premier fichier.
-                    */
 
                     loadPlaylistItem(
                         0,
@@ -4259,11 +4212,6 @@
             let position =
                 getCurrentModePosition();
 
-
-            /*
-                Si aucun élément du mode actuel
-                n'est sélectionné, on commence au premier.
-            */
 
             if (position === -1) {
 
@@ -4696,14 +4644,6 @@
             };
 
 
-        /*
-            Un clic directement sur la vidéo
-            permet de jouer/pause.
-
-            Le bouton central ne déclenche donc
-            pas le clic de la vidéo.
-        */
-
         videoEl.addEventListener(
             "click",
             toggleVideoPlay
@@ -4899,13 +4839,19 @@
             }
 
 
+            const clientX =
+                event.touches && event.touches.length
+                    ? event.touches[0].clientX
+                    : event.clientX;
+
+
             const ratio =
                 Math.max(
                     0,
                     Math.min(
                         1,
                         (
-                            event.clientX -
+                            clientX -
                             rect.left
                         ) /
                         rect.width
@@ -5410,7 +5356,9 @@
 
 
         /* =========================================================
-        VIDEO CONTROLS
+        VIDEO CONTROLS (visibilité desktop uniquement ;
+        sur tactile ils restent affichés en permanence
+        via la media query "hover: none")
         ========================================================= */
 
         function showVideoControls() {
@@ -5426,7 +5374,8 @@
 
 
             if (
-                !videoEl.paused
+                !videoEl.paused &&
+                window.matchMedia("(hover: hover)").matches
             ) {
 
                 controlsTimer =
@@ -5454,7 +5403,7 @@
             "touchstart",
             () => {
 
-                videoWrap.classList.toggle(
+                videoWrap.classList.add(
                     "show-controls"
                 );
             },
@@ -5492,23 +5441,28 @@
 
         document.addEventListener(
             "click",
-            () => {
+            event => {
 
-                settingsMenu.classList.remove(
-                    "active"
-                );
+                if (
+                    !event.target.closest(".video-controls")
+                ) {
+
+                    settingsMenu.classList.remove(
+                        "active"
+                    );
 
 
-                document
-                    .querySelectorAll(
-                        ".speed-menu"
-                    )
-                    .forEach(menu => {
+                    document
+                        .querySelectorAll(
+                            ".speed-menu"
+                        )
+                        .forEach(menu => {
 
-                        menu.classList.remove(
-                            "active"
-                        );
-                    });
+                            menu.classList.remove(
+                                "active"
+                            );
+                        });
+                }
             }
         );
 
@@ -5703,12 +5657,6 @@
                 const media =
                     getCurrentMedia();
 
-
-                /*
-                    Empêche les raccourcis
-                    de modifier un média
-                    qui n'est pas affiché.
-                */
 
                 if (
                     playlist[currentIndex].type !==
@@ -5918,11 +5866,6 @@
 
         renderPlaylist();
 
-        /*
-            État initial : pas besoin de passer par setMode()
-            (qui ignore désormais les no-op) car on est déjà en
-            mode "audio" par défaut dans le HTML/CSS.
-        */
         showEmptyState();
 
 
@@ -5933,11 +5876,6 @@
         window.addEventListener(
             "beforeunload",
             () => {
-
-                /*
-                    Libère toutes les ObjectURLs
-                    lorsque la page est quittée.
-                */
 
                 playlist.forEach(item => {
 
